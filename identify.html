@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Identify a Car — CarSpotter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .btn-row { display: flex; gap: 10px; }
+
+    /* Result cards */
+    .results { display: flex; flex-direction: column; gap: 10px; margin-top: 32px; }
+
+    .result-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .result-card:hover {
+      border-color: #bbb;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.07);
+    }
+
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+
+    .result-name  { font-size: 16px; font-weight: 700; }
+    .result-pct   { font-size: 12px; color: var(--muted); }
+    .result-desc  { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+    .result-hint  { font-size: 11px; color: #bbb; margin-top: 8px; }
+
+    .badges { display: flex; flex-wrap: wrap; gap: 5px; }
+
+    .score-track { height: 3px; background: var(--bg); border-radius: 2px; margin-top: 10px; }
+    .score-fill  { height: 3px; background: var(--text); border-radius: 2px; transition: width 0.35s; }
+
+    .results-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 540px) {
+      .field-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="logo">Car<span>Spotter</span></a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="identify.html" class="active">Identify</a>
+      <a href="wiki/index.html">Wiki</a>
+      <a href="guides/index.html">Guides</a>
+      <a href="log.html">My Sightings</a>
+    </nav>
+  </header>
+
+  <div class="page-header">
+    <h1>Identify a Car</h1>
+    <p>Remember features but not the name? Fill in what you know and we'll find the closest matches.</p>
+  </div>
+
+  <main>
+    <div class="field-grid">
+      <div class="field">
+        <label>Era / decade</label>
+        <select id="f-decade">
+          <option value="">Any</option>
+          <option>1920s</option><option>1930s</option><option>1940s</option>
+          <option>1950s</option><option>1960s</option><option>1970s</option>
+          <option>1980s</option><option>1990s</option><option>2000s</option><option>2010s+</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Body style</label>
+        <select id="f-body">
+          <option value="">Any</option>
+          <option>Sedan</option><option>Coupe</option><option>Convertible</option>
+          <option>Station wagon</option><option>Pickup truck</option><option>SUV</option>
+          <option>Muscle car</option><option>Sports car</option><option>Van</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Origin</label>
+        <select id="f-origin">
+          <option value="">Any</option>
+          <option>American</option><option>European</option><option>Japanese</option><option>British</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Doors</label>
+        <select id="f-doors">
+          <option value="">Any</option>
+          <option>2</option><option>4</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Notable feature</label>
+        <select id="f-feature">
+          <option value="">Any</option>
+          <option>Tail fins</option><option>Chrome bumpers</option><option>Round taillights</option>
+          <option>Pop-up headlights</option><option>Suicide doors</option><option>T-top roof</option>
+          <option>Long hood</option><option>Bubble top</option><option>Fastback</option>
+          <option>Wood paneling</option><option>Dual exhaust</option><option>Hood scoops</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Color (approx)</label>
+        <select id="f-color">
+          <option value="">Any</option>
+          <option>Black</option><option>White</option><option>Red</option><option>Blue</option>
+          <option>Green</option><option>Silver</option><option>Yellow</option><option>Two-tone</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="identify()">Find matches</button>
+      <button class="btn btn-ghost"   onclick="clearFilters()">Clear</button>
+    </div>
+
+    <div id="results-area"></div>
+  </main>
+
+  <footer><p>CarSpotter &mdash; a field guide for people who look twice</p></footer>
+  <div id="toast"></div>
+
+  <script src="vehicles.js"></script>
+  <script>
+    function getVal(id) { return document.getElementById(id).value; }
+
+    function identify() {
+      const filters = {
+        decade:  getVal('f-decade'),
+        body:    getVal('f-body'),
+        origin:  getVal('f-origin'),
+        doors:   getVal('f-doors'),
+        feature: getVal('f-feature'),
+        color:   getVal('f-color'),
+      };
+
+      if (!Object.values(filters).some(v => v)) {
+        document.getElementById('results-area').innerHTML =
+          '<p class="empty">Set at least one filter to find matches.</p>';
+        return;
+      }
+
+      const scored = VEHICLES.map(v => {
+        let score = 0; const reasons = [];
+        if (filters.decade  && v.decade === filters.decade)            { score += 3; reasons.push(filters.decade); }
+        if (filters.body    && v.body   === filters.body)              { score += 3; reasons.push(filters.body); }
+        if (filters.origin  && v.origin === filters.origin)            { score += 2; reasons.push(filters.origin); }
+        if (filters.doors   && String(v.doors) === filters.doors)      { score += 2; reasons.push(filters.doors + '-door'); }
+        if (filters.feature && v.features.includes(filters.feature))   { score += 3; reasons.push(filters.feature); }
+        if (filters.color   && v.features.includes(filters.color))     { score += 1; reasons.push(filters.color); }
+        return { ...v, score, reasons };
+      }).filter(v => v.score > 0).sort((a, b) => b.score - a.score).slice(0, 6);
+
+      if (!scored.length) {
+        document.getElementById('results-area').innerHTML =
+          '<p class="empty">No matches — try removing a filter.</p>';
+        return;
+      }
+
+      const max = scored[0].score;
+
+      document.getElementById('results-area').innerHTML = `
+        <div class="results-label">Top matches</div>
+        <div class="results">
+          ${scored.map(v => {
+            const pct  = Math.round(v.score / max * 100);
+            const slug = v.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+            return `
+              <div class="result-card" onclick="window.location='wiki/${slug}.html'">
+                <div class="result-header">
+                  <span class="result-name">${v.name}</span>
+                  <span class="result-pct">${pct}% match</span>
+                </div>
+                <div class="result-desc">${v.desc}</div>
+                <div class="badges">${v.reasons.map(r => `<span class="tag">${r}</span>`).join('')}</div>
+                <div class="score-track"><div class="score-fill" style="width:${pct}%"></div></div>
+                <div class="result-hint">Click to open wiki page &rarr;</div>
+              </div>`;
+          }).join('')}
+        </div>`;
+    }
+
+    function clearFilters() {
+      ['f-decade','f-body','f-origin','f-doors','f-feature','f-color']
+        .forEach(id => document.getElementById(id).value = '');
+      document.getElementById('results-area').innerHTML = '';
+    }
+  </script>
+</body>
+</html>

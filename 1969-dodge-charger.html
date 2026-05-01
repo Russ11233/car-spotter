@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1969 Dodge Charger — CarSpotter Wiki</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../shared.css" />
+  <style>
+    /* ── Vehicle hero ────────────────────────────────────────── */
+    .vehicle-hero {
+      background: var(--text);
+      color: #fff;
+      border-bottom: 3px solid var(--accent);
+      padding: 48px 24px;
+    }
+
+    .vehicle-hero-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .vehicle-breadcrumb {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 12px;
+    }
+
+    .vehicle-breadcrumb a { color: rgba(255,255,255,0.5); }
+    .vehicle-breadcrumb a:hover { color: #fff; text-decoration: none; }
+
+    .vehicle-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 64px);
+      letter-spacing: 0.03em;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .vehicle-hero h1 span { color: var(--accent); }
+
+    .vehicle-tagline {
+      font-size: 16px;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 20px;
+      max-width: 480px;
+    }
+
+    .vehicle-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .vehicle-tag {
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.7);
+    }
+
+    .vehicle-img-placeholder {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      aspect-ratio: 16/10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.2);
+      font-size: 13px;
+      gap: 8px;
+    }
+
+    .vehicle-img-placeholder .icon { font-size: 40px; }
+
+    /* ── Page layout ─────────────────────────────────────────── */
+    .wiki-layout {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* ── Article body ────────────────────────────────────────── */
+    .wiki-body h2 {
+      font-family: var(--font-display);
+      font-size: 28px;
+      letter-spacing: 0.03em;
+      margin: 36px 0 12px;
+    }
+
+    .wiki-body h2:first-child { margin-top: 0; }
+
+    .wiki-body p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: #2e2d2a;
+      margin-bottom: 16px;
+    }
+
+    .wiki-body ul {
+      margin: 0 0 16px 20px;
+    }
+
+    .wiki-body ul li {
+      font-size: 15px;
+      line-height: 1.75;
+      color: #2e2d2a;
+      margin-bottom: 6px;
+    }
+
+    .wiki-body strong { font-weight: 700; color: var(--text); }
+
+    .callout {
+      background: var(--bg);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 14px 18px;
+      margin: 24px 0;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── Sidebar ─────────────────────────────────────────────── */
+    .wiki-sidebar { position: sticky; top: 76px; }
+
+    .spec-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .spec-card-title {
+      background: var(--text);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 18px;
+      letter-spacing: 0.04em;
+      padding: 10px 16px;
+    }
+
+    .spec-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 9px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .spec-row:last-child { border-bottom: none; }
+    .spec-key   { color: var(--muted); }
+    .spec-value { font-weight: 600; text-align: right; }
+
+    .log-btn {
+      width: 100%;
+      display: block;
+      text-align: center;
+      padding: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: opacity 0.15s;
+      margin-bottom: 16px;
+    }
+
+    .log-btn:hover { opacity: 0.85; text-decoration: none; }
+
+    .nav-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+    }
+
+    .nav-card-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .nav-card a {
+      display: block;
+      font-size: 13px;
+      padding: 5px 0;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-card a:last-child { border-bottom: none; }
+    .nav-card a:hover { color: var(--accent); text-decoration: none; }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 720px) {
+      .vehicle-hero-inner { grid-template-columns: 1fr; }
+      .vehicle-img-placeholder { display: none; }
+      .wiki-layout { grid-template-columns: 1fr; }
+      .wiki-sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="../index.html" class="logo">Car<span>Spotter</span></a>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="../identify.html">Identify</a>
+      <a href="index.html" class="active">Wiki</a>
+      <a href="../guides/index.html">Guides</a>
+      <a href="../log.html">My Sightings</a>
+    </nav>
+  </header>
+
+  <!-- ── Vehicle hero ──────────────────────────────────────────── -->
+  <div class="vehicle-hero">
+    <div class="vehicle-hero-inner">
+      <div>
+        <div class="vehicle-breadcrumb">
+          <a href="index.html">Wiki</a> &rsaquo; 1960s &rsaquo; American Muscle
+        </div>
+        <h1>1969 Dodge <span>Charger</span></h1>
+        <p class="vehicle-tagline">
+          The definitive muscle car silhouette. Coke-bottle body, hidden headlights, and a mean stance that's been turning heads for over 50 years.
+        </p>
+        <div class="vehicle-tags">
+          <span class="vehicle-tag">1960s</span>
+          <span class="vehicle-tag">American</span>
+          <span class="vehicle-tag">Muscle car</span>
+          <span class="vehicle-tag">2-door</span>
+          <span class="vehicle-tag">Fastback</span>
+          <span class="vehicle-tag">Dual exhaust</span>
+        </div>
+      </div>
+      <div class="vehicle-img-placeholder">
+        <span class="icon">&#9632;</span>
+        <span>Add a photo</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Wiki content ───────────────────────────────────────────── -->
+  <div class="wiki-layout">
+
+    <!-- Article -->
+    <article class="wiki-body">
+
+      <h2>Overview</h2>
+      <p>
+        The 1969 Dodge Charger is arguably the most recognizable American muscle car ever built.
+        Its second-generation design — known internally as the B-body — introduced the swooping
+        "Coke bottle" profile that became the template for every muscle car that followed.
+        The hidden headlights, tunneled rear window, and wide rear haunches make it instantly
+        identifiable even to people who don't know cars.
+      </p>
+      <p>
+        It became a cultural icon almost immediately, most famously as the General Lee in
+        <em>The Dukes of Hazzard</em> and as the villain's car in <em>Bullitt</em> (1968) — both
+        roles that cemented its reputation as the quintessential American muscle machine.
+      </p>
+
+      <div class="callout">
+        The 1969 Charger is the most-reproduced die-cast muscle car in history. If you see one
+        in the wild, it's almost certainly been restored — survivors in original condition are rare
+        and valuable.
+      </div>
+
+      <h2>How to spot it</h2>
+      <p>
+        The easiest identifier on a '69 Charger is the <strong>hidden headlights</strong> — a
+        full-width grille that hides the headlamp pods behind body-colored doors that flip open
+        when the lights are switched on. From the front, the grille looks completely flat and
+        unbroken when the lights are off.
+      </p>
+      <p>
+        From the rear, look for the <strong>tunneled rear window</strong> — it recesses into the
+        roofline rather than sitting flush with the C-pillar. The tail panel is also a wide flat
+        rectangle spanning the full width of the car, with round taillights recessed into each
+        end.
+      </p>
+      <ul>
+        <li><strong>Front:</strong> Full-width flat grille, hidden headlight doors, long hood</li>
+        <li><strong>Profile:</strong> Coke-bottle waistline, fastback roofline, short rear deck</li>
+        <li><strong>Rear:</strong> Tunneled C-pillar, wide flat tail panel, round taillights</li>
+        <li><strong>Sound:</strong> Big block V8s produce a distinctive low, burbling idle</li>
+      </ul>
+
+      <h2>Confusable cars</h2>
+      <p>
+        The 1968 Charger shares the same body, but has a different full-length center console
+        and a slightly different grille treatment. The <strong>1970 Charger</strong> got a major
+        refresh — the headlights are no longer hidden and the grille is divided by a center bar,
+        making it easy to tell apart.
+      </p>
+      <p>
+        The <strong>Plymouth Road Runner</strong> and <strong>GTX</strong> share the same
+        B-body platform and can look similar in profile, but have very different front ends and
+        lack the Charger's distinctive rear window tunnel.
+      </p>
+
+      <h2>Engines</h2>
+      <p>
+        The '69 Charger was offered with a wide range of engines, from a base 318 V8 all the
+        way up to the legendary 426 Hemi — one of the most powerful production engines of the era.
+        The most common survivor today is the <strong>440 Magnum</strong>, which was the sweet
+        spot between performance and availability when new.
+      </p>
+      <p>
+        If you hear a deep, rattly idle at low RPM, you're likely looking at a 440 or Hemi car.
+        The smaller 318 and 383 cars sound notably tamer.
+      </p>
+
+      <h2>What to look for on a real sighting</h2>
+      <ul>
+        <li>Check whether the headlight doors open fully — motors fail with age</li>
+        <li>Look at the rocker panels and wheel arches for rust bubbling</li>
+        <li>Most cars have been repainted — look for overspray in jambs to spot non-original color</li>
+        <li>Engine bay badges tell you the displacement: 440, 383, 318, or the coveted 426 Hemi</li>
+        <li>A shaker hood scoop (bulge in the hood that shakes with the engine) signals a high-performance car</li>
+      </ul>
+
+    </article>
+
+    <!-- Sidebar -->
+    <aside class="wiki-sidebar">
+
+      <button class="log-btn" onclick="logThis()">+ Log a sighting</button>
+
+      <div class="spec-card">
+        <div class="spec-card-title">Quick specs</div>
+        <div class="spec-row">
+          <span class="spec-key">Make</span>
+          <span class="spec-value">Dodge</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Model</span>
+          <span class="spec-value">Charger</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Year</span>
+          <span class="spec-value">1969</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Era</span>
+          <span class="spec-value">1960s</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Origin</span>
+          <span class="spec-value">American</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Body</span>
+          <span class="spec-value">Muscle car / Fastback</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Doors</span>
+          <span class="spec-value">2</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Engines</span>
+          <span class="spec-value">318 / 383 / 440 / 426 Hemi</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Rarity</span>
+          <span class="spec-value">Rare</span>
+        </div>
+      </div>
+
+      <div class="nav-card">
+        <div class="nav-card-title">Related cars</div>
+        <a href="1969-ford-mustang.html">1965 Ford Mustang</a>
+        <a href="1967-pontiac-gto.html">1967 Pontiac GTO</a>
+        <a href="1970-plymouth-barracuda.html">1970 Plymouth Barracuda</a>
+        <a href="1970-chevrolet-chevelle-ss.html">1970 Chevrolet Chevelle SS</a>
+      </div>
+
+    </aside>
+  </div>
+
+  <footer><p>CarSpotter &mdash; a field guide for people who look twice</p></footer>
+  <div id="toast"></div>
+
+  <script>
+    function logThis() {
+      // Pre-fill the log page and navigate to it
+      localStorage.setItem('cs_prefill', JSON.stringify({
+        vehicle: '1969 Dodge Charger',
+        date: new Date().toISOString().split('T')[0]
+      }));
+      window.location.href = '../log.html';
+    }
+
+    // Show toast if redirected back after logging
+    window.addEventListener('DOMContentLoaded', () => {
+      const msg = localStorage.getItem('cs_logged_msg');
+      if (msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2500);
+        localStorage.removeItem('cs_logged_msg');
+      }
+    });
+  </script>
+
+</body>
+</html>
